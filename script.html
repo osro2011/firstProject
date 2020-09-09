@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Mitt JavaScript</title>
+		<meta charset="utf-8">
+		<link rel="stylesheet" type="text/css" href="style.css">
+	</head>
+	<body>
+
+		<!--
+			HTML - HYPERTEXT MARKUP LANGUAGE
+			JavaScript - Programmering för webben
+			Java - Inte JavaScript
+
+			Funktion = rectangle(x, y, width, height, color);
+			Argument = Finns i en funktion
+		-->
+		<script src="http://koda.nu/simple.js">
+		// Bounds: 1980x1080
+			// rectangle(x, y, w, h, c);			
+			// circle(x, y, r, c);
+			// triangle(x, y, 10, 1080, 1980, 10, c);
+			// ring(x, y, r, w, c);
+			// line(x1, y1, x2, y2, w, c);
+
+			// Hus hörn 
+				// Övre H 1190, 600
+				// Övre V 790, 600
+				// Nedre H 1190, 1000
+				// Nedre V 790, 1000
+
+				// Nock 990, 500
+
+			// Windows
+				// L
+					// Övre H 900, 670
+					// Övre V 840, 670
+					// Undre H 900, 730
+					// Undre V 840, 730
+
+				// R
+					// 
+			
+			// Door
+				//
+
+
+			//BG
+			rectangle(0, 0, 1980, 1080, "lime");
+
+			//Sun
+			circle(20, 20, 101, "yellow");
+
+			//House
+			//base
+			rectangle(790, 600, 400, 200, "red");
+			//roof
+			triangle(790, 600, 1190, 600, 990, 500, "brown");
+			//windowL
+			rectangle(840, 670, 60, 60, "lightblue");
+			//windowR
+			rectangle(1080, 670, 60, 60, "lightblue");
+			//door
+			rectangle(960, 670, 60, 130, "orange");
+			//doorknob
+			circle(1013, 732, 6, "gold");
+			
+		</script>
+	</body>
+</html>
