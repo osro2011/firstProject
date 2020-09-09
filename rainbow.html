@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Rainbow</title>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        <script src="http://koda.nu/simple.js">
+            var x = 1920/2;
+            var y = 914/2;
+            var size = 300;
+            var bgc = "lightblue";
+            var fgc = "#0f0";
+
+            rectangle(0, 0, 1920, 914, bgc); 
+
+            circle(x, y, size*1, "#f00");
+            circle(x, y, size*0.9, "#ffa500");
+            circle(x, y, size*0.8, "#ff0");
+            circle(x, y, size*0.7, "#008000");
+            circle(x, y, size*0.6, "#00f");
+            circle(x, y, size*0.5, "#4b0082");
+            circle(x, y, size*0.4, "#ee82ee");
+            circle(x, y, size*0.3, bgc);
+            
+            rectangle(0, y, 1920, 1080, fgc); 
+        </script>
+    </body>
+</html>
