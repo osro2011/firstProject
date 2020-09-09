@@ -26,8 +26,8 @@
 			// Hus hörn 
 				// Övre H 1190, 600
 				// Övre V 790, 600
-				// Nedre H 1190, 1000
-				// Nedre V 790, 1000
+				// Nedre H 1190, 800
+				// Nedre V 790, 800
 
 				// Nock 990, 500
 
@@ -39,7 +39,10 @@
 					// Undre V 840, 730
 
 				// R
-					// 
+					// Övre H 1140, 670
+                    // Övre V 1080, 670
+                    // Undre H 1140, 730
+                    // Undre V 1080, 730
 			
 			// Door
 				//
@@ -64,8 +67,14 @@
 			rectangle(960, 670, 60, 130, "orange");
 			//doorknob
 			circle(1013, 732, 6, "gold");
-            line(0, 0, 100, 100, 10, "blue");
-			
+            //outlines
+            line(790, 600, 1190, 600, 2, "black");
+            line(790, 600, 990, 500, 2, "black");
+            line(990, 500, 1190, 600, 2, "black");
+            line(790, 600, 790, 800, 2, "black");
+            line(790, 800, 1190, 800, 2, "black");
+            line(1190, 600, 1190, 800, 2, "black"); 
+
 	    </script>
 	</body>
 </html>
