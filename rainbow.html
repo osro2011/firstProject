@@ -6,20 +6,36 @@
     </head>
     <body>
         <script src="http://koda.nu/simple.js">
-            var x = 1920/2;
-            var y = 914/2;
-            var size = 300;
-            var bgc = "lightblue";
-            var fgc = "#0f0";
-            var colors = ["#f00", "#ffa500", "#ff0", "#008000", "#00f", "#4b0082", "#ee82ee", bgc];
+            var screenObj = { 
+                x:1920,
+                y:914, 
+                bgc:"lightblue", 
+                fgc:"#0f0" 
+            };
 
-            rectangle(0, 0, 1920, 914, bgc);
+            var circleObj = { 
+                x:screenObj.x/2,
+                y:screenObj.y/2,
+                size:300,
+                colors:[
+                    "#f00",
+                    "#ffa500",
+                    "#ff0",
+                    "#008000", 
+                    "#00f", 
+                    "#4b0082", 
+                    "#ee82ee", 
+                    screenObj.bgc
+                    ] 
+            };
 
-            for (var i = 0; i <= colors.length; i++) {
-                circle(x, y, size*0.1*(10-i), colors[i]);
+            rectangle(0, 0, 1920, 914, screenObj.bgc);
+
+            for (var i = 0; i <= circleObj.colors.length; i++) {
+                circle(circleObj.x, circleObj.y, circleObj.size*0.1*(10-i), circleObj.colors[i]);
             }
             
-            rectangle(0, y, 1920, 1080, fgc); 
+            rectangle(0, circleObj.y, 1920, 1080, screenObj.fgc); 
         </script>
     </body>
 </html>
