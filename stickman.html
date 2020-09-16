@@ -8,10 +8,13 @@
     </head>
     <body>
         <script src="http://koda.nu/simple.js">
-            function drawStickman(x, y) {
-                
+            function drawStickman(x, y, size, rArmAngle, lArmAngle, rLegAngle, lLegAngle, thick, color) {
+                ring(x, y, size, thick, color);
+                line(x, y + size, x, y + 5 * size, thick, color);
+                line(x, y + 2 * size, x - Math.sin(45) * (180/Math.PI) * 2 * size, y + 2 * size + (Math.cos(45) * (180/Math.PI) * 2 * size), thick, color); 
+                line(x, y + 2 * size, x + Math.sin(45) * (180/Math.PI) * 2 * size, y + 2 * size + (Math.cos(45) * (180/Math.PI) * 2 * size), thick, color);
             };
-            drawStickman(1000, 1000);
+            drawStickman(100, 100, 50, 10, "black");
         </script>
     </body>
 </html>
