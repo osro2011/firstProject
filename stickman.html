@@ -8,13 +8,20 @@
     </head>
     <body>
         <script src="http://koda.nu/simple.js">
-            function drawStickman(x, y, size, rArmAngle, lArmAngle, rLegAngle, lLegAngle, thick, color) {
-                ring(x, y, size, thick, color);
-                line(x, y + size, x, y + 5 * size, thick, color);
-                line(x, y + 2 * size, x - Math.sin(45) * (180/Math.PI) * 2 * size, y + 2 * size + (Math.cos(45) * (180/Math.PI) * 2 * size), thick, color); 
-                line(x, y + 2 * size, x + Math.sin(45) * (180/Math.PI) * 2 * size, y + 2 * size + (Math.cos(45) * (180/Math.PI) * 2 * size), thick, color);
+            function drawStickman(x, y, size, lArmAngle, rArmAngle, lLegAngle, rLegAngle, thick, color) {
+                ring(x, y, size, thick, color); //Head
+                line(x, y + size, x, y + 5 * size, thick, color); //Torso
+                line(x, y + 2 * size, x - Math.sin(degToRad(lArmAngle)) * 2 * size, y + 2 * size + Math.cos(degToRad(lArmAngle)) * 2 * size, thick, color); //L arm
+                line(x, y + 2 * size, x + Math.sin(degToRad(rArmAngle)) * 2 * size, y + 2 * size + Math.cos(degToRad(rArmAngle)) * 2 * size, thick, color); //R arm
+                line(x, y + 5 * size, x - Math.sin(degToRad(lLegAngle)) * 2 * size, y + 5 * size + Math.cos(degToRad(lLegAngle)) * 2 * size, thick, color); //L leg
+                line(x, y + 5 * size, x + Math.sin(degToRad(rLegAngle)) * 2 * size, y + 5 * size + Math.cos(degToRad(rLegAngle)) * 2 * size, thick, color); //R leg
+
             };
-            drawStickman(100, 100, 50, 10, "black");
+
+            function degToRad(degrees) {
+                return degrees * (Math.PI / 180);
+            }
+            drawStickman(100, 100, 100, 45, 45, 45, 45, 10, "black");
         </script>
     </body>
 </html>
