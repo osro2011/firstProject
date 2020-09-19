@@ -16,81 +16,193 @@
 			Argument = Finns i en funktion
 		-->
 		<script src="http://koda.nu/simple.js">
-		// Bounds: 1980x1080
-			// rectangle(x, y, w, h, c);			
+			//General shape class
+			class Shape {
+				//Shapes have x, y and color properties in common
+				constructor(X, Y, Color) {
+					//x and y are the base point of any shape
+					this.x = X;
+					this.y = Y;
+					this.color = Color;
+
+					console.log("shape constructed");
+				};
+			};
+
+			//Rectangle class, is a shape and therefore inherits from shape
+			class Rectangle extends Shape {
+				constructor(X, Y, Width, Height, Color, outline = true) {
+					super(X, Y, Color);
+					this.width = Width;
+					this.height = Height;
+					this.color = Color;
+
+					//Draw the rectangle with an outline unless otherwise specified
+					if (outline) {
+						this.drawOutlineRectangle();
+					} else {
+						rectangle(this.x, this.y, this.width, this.height, this.color);
+					};
+
+					console.log("rectangle constructed");
+				};
+
+				//Draw an outlined rectangle
+				drawOutlineRectangle(lineWidth = 3, lineColor = "black") {
+					//Draw rectangle
+					rectangle(this.x, this.y, this.width, this.height, this.color);
+					//Draw top outline
+					line(this.x, this.y, this.x + this.width, this.y, lineWidth, lineColor);
+					//Draw left outline
+					line(this.x, this.y, this.x, this.y + this.height, lineWidth, lineColor);
+					//Draw bottom outline
+					line(this.x, this.y + this.height, this.x + this.width, this.y + this.height, lineWidth, lineColor);
+					//Draw right outline
+					line(this.x + this.width, this.y, this.x + this.width, this.y + this.height, lineWidth, lineColor);
+				};
+			};
+
+			//Triangle class, is a shape and therefore inherits from shape
+			class Triangle extends Shape {
+				constructor(X, Y, X2, Y2, X3, Y3, Color, outline = true) {
+					super(X, Y, Color);
+					this.x2 = X2;
+					this.y2 = Y2;
+					this.x3 = X3;
+					this.y3 = Y3;
+
+					//Draw the triangle with an outline unless otherwise specified
+					if (outline) {
+						this.drawOutlineTriangle();
+					} else {
+						rectangle(this.x, this.y, this.x2, this.y2, this.x3, this.y3, this.color);
+					};
+
+					console.log("triangle constructed");
+				};
+
+				//Draw an outlined triangle
+				drawOutlineTriangle(lineWidth = 3, lineColor = "black") {
+					//Draw triangle
+					triangle(this.x, this.y, this.x2, this.y2, this.x3, this.y3, this.color);
+					//Draw outline from first point to second point
+					line(this.x, this.y, this.x2, this.y2, lineWidth, lineColor);
+					//Draw outline from first point to third point
+					line(this.x, this.y, this.x3, this.y3, lineWidth, lineColor);
+					//Draw outline from second point to third point
+					line(this.x2, this.y2, this.x3, this.y3, lineWidth, lineColor);
+				};
+			};
+
+			class Rainbow extends Shape {
+				constructor(X, Y, Size, Background, Colors) {
+					super(X, Y, Colors);
+					this.size = Size;
+					this.color.push(Background.color);
+
+					this.drawRainbow();
+
+					console.log("rainbow constructed");
+				};
+
+				drawRainbow() {
+					for (var i = 0; i <= this.color.length; i++) {
+                		circle(this.x, this.y, this.size*0.1*(this.color.length-i+4), this.color[i]);
+            		};
+				};
+			};
+
+			class Stickman extends Shape {
+				constructor(X, Y, Size, Thickness = "5", Color = "black", LArmAngle = 45, RArmAngle = 45, LLegAngle = 45, RLegAngle = 45) {
+					super(X, Y, Color);
+					this.size = Size;
+					this.lArmAngle = LArmAngle;
+					this.rArmAngle = RArmAngle;
+					this.lLegAngle = LLegAngle;
+					this.rLegAngle = RLegAngle;
+					this.thickness = Thickness;
+
+					this.drawStickman();
+
+					console.log("stickman constructed");
+				};
+
+				drawStickman() {
+					//Head
+					ring(this.x, this.y, this.size, this.thickness, this.color); 
+					//Torso
+					line(this.x, this.y + this.size, this.x, this.y + 5 * this.size, this.thickness, this.color); 
+					//L arm
+					line(this.x, this.y + 2 * this.size, this.x - Math.sin(this.degToRad(this.lArmAngle)) * 2 * this.size, this.y + 2 * this.size + Math.cos(this.degToRad(this.lArmAngle)) * 2 * this.size, this.thickness, this.color); 
+					//R arm
+					line(this.x, this.y + 2 * this.size, this.x + Math.sin(this.degToRad(this.rArmAngle)) * 2 * this.size, this.y + 2 * this.size + Math.cos(this.degToRad(this.rArmAngle)) * 2 * this.size, this.thickness, this.color); 
+					//L leg
+					line(this.x, this.y + 5 * this.size, this.x - Math.sin(this.degToRad(this.lLegAngle)) * 2 * this.size, this.y + 5 * this.size + Math.cos(this.degToRad(this.lLegAngle)) * 2 * this.size, this.thickness, this.color); 
+					//R leg
+					line(this.x, this.y + 5 * this.size, this.x + Math.sin(this.degToRad(this.rLegAngle)) * 2 * this.size, this.y + 5 * this.size + Math.cos(this.degToRad(this.rLegAngle)) * 2 * this.size, this.thickness, this.color); 
+				};
+				
+				degToRad(degrees) {
+                	return degrees * (Math.PI / 180);
+            	};
+			};
+
+			canvas = document.getElementById("canvas")
+			bounds = {
+				height: canvas.height,
+				width: canvas.width
+			};
+			imageUrl = "http://pngimg.com/uploads/sun/sun_PNG13416.png"
+			rainbowColors = [
+				"#f00",
+                "#ffa500",
+                "#ff0",
+                "#008000", 
+                "#00f", 
+                "#4b0082", 
+                "#ee82ee",
+			];
+
+			console.log(bounds)
+
+			// Big brain in script documentation
+			// rectangle(x, y, w, h, c);
 			// circle(x, y, r, c);
-			// triangle(x, y, 10, 1080, 1980, 10, c);
+			// triangle(x1, y1, x2, y2, x3, y3, c);
 			// ring(x, y, r, w, c);
 			// line(x1, y1, x2, y2, w, c);
+			// picture(x, y, url, w, h);
+			// text(x, y, s, t, c);
 
-			// Hus hörn 
-				// Övre H 1190, 600
-				// Övre V 790, 600
-				// Nedre H 1190, 800
-				// Nedre V 790, 800
-
-				// Nock 990, 500
-
-			// Windows
-				// L
-					// Övre H 900, 670
-					// Övre V 840, 670
-					// Undre H 900, 730
-					// Undre V 840, 730
-
-				// R
-					// Övre H 1140, 670
-                    // Övre V 1080, 670
-                    // Undre H 1140, 730
-                    // Undre V 1080, 730
-			
-			// Door
-				//
-
-
-			//BG
-			rectangle(0, 0, 1980, 1080, "lime");
-
-			//Sun
-			circle(20, 20, 101, "yellow");
+			//Background
+				//Sky
+				sky = new Rectangle(0, 0, bounds.width, bounds.height/2, "lightblue", false);
+				text(bounds.width*0.1, bounds.height*0.05, 15, "https://www.youtube.com/watch?v=dQw4w9WgXcQ", "black");
+				//Rainbow
+				rainbow = new Rainbow(bounds.width*0.65, bounds.height*0.5, 250, sky, rainbowColors);
+				//Grass
+				rectangle(0, bounds.height/2, bounds.width, bounds.height, "lime");
+				line(0, bounds.height/2, bounds.width, bounds.height/2, 3, "black");
+				//Sun
+				picture(-75, -75, imageUrl, 200, 200);
 
 			//House
-			//base
-			rectangle(790, 600, 400, 200, "red");
-			//roof
-			triangle(790, 600, 1190, 600, 990, 500, "brown");
-			//windowL
-			rectangle(840, 670, 60, 60, "lightblue");
-			//windowR
-			rectangle(1080, 670, 60, 60, "lightblue");
-			//door
-			rectangle(960, 670, 60, 130, "orange");
-			//doorknob
-			circle(1013, 732, 6, "gold");
-            //random circle
-            circle(1440, 500, 50, "white");
-            //outlines
-            //main house
-            line(790, 600, 1190, 600, 2, "black");
-            line(790, 600, 990, 500, 2, "black");
-            line(990, 500, 1190, 600, 2, "black");
-            line(790, 600, 790, 800, 2, "black");
-            line(790, 800, 1190, 800, 2, "black");
-            line(1190, 600, 1190, 800, 2, "black"); 
-            //windows
-            line(840, 670, 900, 670, 2, "black");
-            line(840, 670, 840, 730, 2, "black");
-            line(840, 730, 900, 730, 2, "black");
-            line(900, 670, 900, 730, 2, "black");
-            line(1080, 670, 1140, 670, 2, "black");
-            line(1080, 670, 1080, 730, 2, "black");
-            line(1080, 730, 1140, 730, 2, "black");
-            line(1140, 670, 1140, 730, 2, "black");
-            //door
-            line(960, 670, 1020, 670, 2, "black");
-            line(960, 670, 960, 800, 2, "black");
-            line(960, 800, 1020, 800, 2, "black");
-            line(1020, 670, 1020, 800, 2, "black");
+				//Base
+				houseBase = new Rectangle(790, 400, 400, 200, "red");
+				//Roof
+				roof = new Triangle(790, 400, 1190, 400, 990, 300, "brown");
+				//WindowL
+				leftWindow = new Rectangle(840, 470, 60, 60, "lightblue");
+				//WindowR
+				rightWindow = new Rectangle(1080, 470, 60, 60, "lightblue");
+				//Door
+				door = new Rectangle(960, 470, 60, 130, "orange");
+				//Doorknob
+				circle(1013, 532, 6, "gold");
+
+			//Things
+				//Person
+				person = new Stickman(bounds.width*0.3, bounds.height*0.6, 30);
 	    </script>
 	</body>
 </html>
