@@ -17,7 +17,31 @@
 		-->
 		<script src="http://koda.nu/simple.js">
 			//General shape class
-			class Shape {
+			class Field {
+                constructor(X, Y, Width, Height, Outline=false) {
+                    this.x = X;
+                    this.y = Y;
+                    this.width = Width;
+                    this.height = Height;
+                    this.outline = Outline;
+
+                    if (this.outline) {
+                        line(this.x, this.y, this.x + this.width, this.y, 3, "black");
+                        line(this.x, this.y, this.x, this.y + this.height, 3, "black");
+                        line(this.x, this.y + this.height, this.x + this.width, this.y + this.height, 3, "black");
+                        line(this.x + this.width, this.y, this.x + this.width, this.y + this.height, 3, "black");
+                    };
+                };
+
+				randomX() {
+					return random(this.x, this.x + this.width);
+				};
+
+				randomY() {
+					return random(this.y, this.y + this.height);
+				};
+            };
+            class Shape {
 				//Shapes have x, y and color properties in common
 				constructor(X, Y, Color) {
 					//x and y are the base point of any shape
@@ -113,7 +137,7 @@
 			};
 
 			class Stickman extends Shape {
-				constructor(X, Y, Size, Thickness = "5", Color = "black", LArmAngle = 45, RArmAngle = 45, LLegAngle = 45, RLegAngle = 45) {
+				constructor(X, Y, Size, Thickness = 5, Color = "black", LArmAngle = 45, RArmAngle = 45, LLegAngle = 45, RLegAngle = 45) {
 					super(X, Y, Color);
 					this.size = Size;
 					this.lArmAngle = LArmAngle;
@@ -201,8 +225,10 @@
 				circle(1013, 532, 6, "gold");
 
 			//Things
+				//Field where person can be
+                personField = new Field(bounds.width*0.1, bounds.height*0.4, bounds.width*0.3, bounds.height*0.3, false);
 				//Person
-				person = new Stickman(bounds.width*0.3, bounds.height*0.6, 30);
+				person = new Stickman(personField.randomX(), personField.randomY(), 30);
 	    </script>
 	</body>
 </html>
