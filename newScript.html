@@ -21,6 +21,8 @@
                 constructor(X, Y) {
                     this.x = X;
                     this.y = Y;
+
+					console.log("point constructed");
                 };
             };
 
@@ -36,6 +38,8 @@
                         line(this.point1.x, this.point2.y, this.point2.x, this.point2.y, 3, "black");
                         line(this.point2.x, this.point1.y, this.point2.x, this.point2.y, 3, "black");
                     };
+
+					console.log("field constructed")
                 };
 
 				randomX() {
@@ -49,11 +53,10 @@
             
 		    class Shape {
 				//Shapes have x, y and color properties in common
-				constructor(X, Y, Color) {
+				constructor(Points, Colors) {
 					//x and y are the base point of any shape
-					this.x = X;
-					this.y = Y;
-					this.color = Color;
+					this.points = Points;
+					this.colors = Colors;
 
 					console.log("shape constructed");
 				};
@@ -61,11 +64,9 @@
 
 			//Rectangle class, is a shape and therefore inherits from shape
 			class Rectangle extends Shape {
-				constructor(X, Y, Width, Height, Color, outline = true) {
-					super(X, Y, Color);
-					this.width = Width;
-					this.height = Height;
-					this.color = Color;
+				constructor(X, Y, X2, Y2, Color, outline = true) {
+					super([new Point(X, Y), new Point(X2, Y2)], Color);
+					//Refactored here
 
 					//Draw the rectangle with an outline unless otherwise specified
 					if (outline) {
