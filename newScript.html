@@ -17,31 +17,37 @@
 		-->
 		<script src="http://koda.nu/simple.js">
 			//General shape class
-			class Field {
-                constructor(X, Y, Width, Height, Outline=false) {
+			class Point {
+                constructor(X, Y) {
                     this.x = X;
                     this.y = Y;
-                    this.width = Width;
-                    this.height = Height;
+                };
+            };
+
+            class Field {
+                constructor(X, Y, X2, Y2, Outline=false) {
+                    this.point1 = new Point(X, Y);
+                    this.point2 = new Point(X2, Y2);
                     this.outline = Outline;
 
                     if (this.outline) {
-                        line(this.x, this.y, this.x + this.width, this.y, 3, "black");
-                        line(this.x, this.y, this.x, this.y + this.height, 3, "black");
-                        line(this.x, this.y + this.height, this.x + this.width, this.y + this.height, 3, "black");
-                        line(this.x + this.width, this.y, this.x + this.width, this.y + this.height, 3, "black");
+                        line(this.point1.x, this.point1.y, this.point2.x, this.point1.y, 3, "black");
+                        line(this.point1.x, this.point1.y, this.point1.x, this.point2.y, 3, "black");
+                        line(this.point1.x, this.point2.y, this.point2.x, this.point2.y, 3, "black");
+                        line(this.point2.x, this.point1.y, this.point2.x, this.point2.y, 3, "black");
                     };
                 };
 
 				randomX() {
-					return random(this.x, this.x + this.width);
+					return random(this.point1.y, this.point2.x);
 				};
 
 				randomY() {
-					return random(this.y, this.y + this.height);
+					return random(this.point1.y, this.point2.y);
 				};
             };
-            class Shape {
+            
+		    class Shape {
 				//Shapes have x, y and color properties in common
 				constructor(X, Y, Color) {
 					//x and y are the base point of any shape
@@ -176,7 +182,7 @@
 				height: canvas.height,
 				width: canvas.width
 			};
-			imageUrl = "http://pngimg.com/uploads/sun/sun_PNG13416.png";
+			imageUrl = "http://pngimg.com/uploads/sun/sun_PNG13416.png"
 			rainbowColors = [
 				"#f00",
                 "#ffa500",
@@ -226,11 +232,9 @@
 				
 			//Things
 				//Field where person can be
-                personField = new Field(bounds.width*0.1, bounds.height*0.4, bounds.width*0.3, bounds.height*0.3, false);
-				personField2 = new Field(bounds.width*0.65, bounds.height*0.35, bounds.width*0.3, bounds.height*0.3, false);
+                personField = new Field(bounds.width*0.05, bounds.height*0.4, bounds.width*0.4, bounds.height*0.7, false);
 				//Person
-				person = new Stickman(personField.randomX(), personField.randomY(), 30, 5, "red");
-				person2 = new Stickman(personField2.randomX(), personField2.randomY(), 30);
+				person = new Stickman(personField.randomX(), personField.randomY(), 30);
 	    </script>
 	</body>
 </html>
