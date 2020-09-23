@@ -1,0 +1,237 @@
+<!--THIS DOCUMENT HAS BEEN OUTDATED-->
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Mitt JavaScript</title>
+		<meta charset="utf-8">
+		<link rel="stylesheet" type="text/css" href="style.css">
+	</head>
+	<body>
+
+		<!--
+			HTML - HYPERTEXT MARKUP LANGUAGE
+			JavaScript - Programmering för webben
+			Java - Inte JavaScript
+
+			Funktion = rectangle(x, y, width, height, color);
+			Argument = Finns i en funktion
+		-->
+		<script src="http://koda.nu/simple.js">
+			//General shape class
+			class Field {
+                constructor(X, Y, Width, Height, Outline=false) {
+                    this.x = X;
+                    this.y = Y;
+                    this.width = Width;
+                    this.height = Height;
+                    this.outline = Outline;
+
+                    if (this.outline) {
+                        line(this.x, this.y, this.x + this.width, this.y, 3, "black");
+                        line(this.x, this.y, this.x, this.y + this.height, 3, "black");
+                        line(this.x, this.y + this.height, this.x + this.width, this.y + this.height, 3, "black");
+                        line(this.x + this.width, this.y, this.x + this.width, this.y + this.height, 3, "black");
+                    };
+                };
+
+				randomX() {
+					return random(this.x, this.x + this.width);
+				};
+
+				randomY() {
+					return random(this.y, this.y + this.height);
+				};
+            };
+            class Shape {
+				//Shapes have x, y and color properties in common
+				constructor(X, Y, Color) {
+					//x and y are the base point of any shape
+					this.x = X;
+					this.y = Y;
+					this.color = Color;
+
+					console.log("shape constructed");
+				};
+			};
+
+			//Rectangle class, is a shape and therefore inherits from shape
+			class Rectangle extends Shape {
+				constructor(X, Y, Width, Height, Color, outline = true) {
+					super(X, Y, Color);
+					this.width = Width;
+					this.height = Height;
+					this.color = Color;
+
+					//Draw the rectangle with an outline unless otherwise specified
+					if (outline) {
+						this.drawOutlineRectangle();
+					} else {
+						rectangle(this.x, this.y, this.width, this.height, this.color);
+					};
+
+					console.log("rectangle constructed");
+				};
+
+				//Draw an outlined rectangle
+				drawOutlineRectangle(lineWidth = 3, lineColor = "black") {
+					//Draw rectangle
+					rectangle(this.x, this.y, this.width, this.height, this.color);
+					//Draw top outline
+					line(this.x, this.y, this.x + this.width, this.y, lineWidth, lineColor);
+					//Draw left outline
+					line(this.x, this.y, this.x, this.y + this.height, lineWidth, lineColor);
+					//Draw bottom outline
+					line(this.x, this.y + this.height, this.x + this.width, this.y + this.height, lineWidth, lineColor);
+					//Draw right outline
+					line(this.x + this.width, this.y, this.x + this.width, this.y + this.height, lineWidth, lineColor);
+				};
+			};
+
+			//Triangle class, is a shape and therefore inherits from shape
+			class Triangle extends Shape {
+				constructor(X, Y, X2, Y2, X3, Y3, Color, outline = true) {
+					super(X, Y, Color);
+					this.x2 = X2;
+					this.y2 = Y2;
+					this.x3 = X3;
+					this.y3 = Y3;
+
+					//Draw the triangle with an outline unless otherwise specified
+					if (outline) {
+						this.drawOutlineTriangle();
+					} else {
+						rectangle(this.x, this.y, this.x2, this.y2, this.x3, this.y3, this.color);
+					};
+
+					console.log("triangle constructed");
+				};
+
+				//Draw an outlined triangle
+				drawOutlineTriangle(lineWidth = 3, lineColor = "black") {
+					//Draw triangle
+					triangle(this.x, this.y, this.x2, this.y2, this.x3, this.y3, this.color);
+					//Draw outline from first point to second point
+					line(this.x, this.y, this.x2, this.y2, lineWidth, lineColor);
+					//Draw outline from first point to third point
+					line(this.x, this.y, this.x3, this.y3, lineWidth, lineColor);
+					//Draw outline from second point to third point
+					line(this.x2, this.y2, this.x3, this.y3, lineWidth, lineColor);
+				};
+			};
+
+			class Rainbow extends Shape {
+				constructor(X, Y, Size, Background, Colors) {
+					super(X, Y, Colors);
+					this.size = Size;
+					this.color.push(Background.color);
+
+					this.drawRainbow();
+
+					console.log("rainbow constructed");
+				};
+
+				drawRainbow() {
+					for (var i = 0; i <= this.color.length; i++) {
+                		circle(this.x, this.y, this.size*0.1*(this.color.length-i+4), this.color[i]);
+            		};
+				};
+			};
+
+			class Stickman extends Shape {
+				constructor(X, Y, Size, Thickness = 5, Color = "black", LArmAngle = 45, RArmAngle = 45, LLegAngle = 45, RLegAngle = 45) {
+					super(X, Y, Color);
+					this.size = Size;
+					this.lArmAngle = LArmAngle;
+					this.rArmAngle = RArmAngle;
+					this.lLegAngle = LLegAngle;
+					this.rLegAngle = RLegAngle;
+					this.thickness = Thickness;
+
+					this.drawStickman();
+
+					console.log("stickman constructed");
+				};
+
+				drawStickman() {
+					//Head
+					ring(this.x, this.y, this.size, this.thickness, this.color); 
+					//Torso
+					line(this.x, this.y + this.size, this.x, this.y + 5 * this.size, this.thickness, this.color); 
+					//L arm
+					line(this.x, this.y + 2 * this.size, this.x - Math.sin(this.degToRad(this.lArmAngle)) * 2 * this.size, this.y + 2 * this.size + Math.cos(this.degToRad(this.lArmAngle)) * 2 * this.size, this.thickness, this.color); 
+					//R arm
+					line(this.x, this.y + 2 * this.size, this.x + Math.sin(this.degToRad(this.rArmAngle)) * 2 * this.size, this.y + 2 * this.size + Math.cos(this.degToRad(this.rArmAngle)) * 2 * this.size, this.thickness, this.color); 
+					//L leg
+					line(this.x, this.y + 5 * this.size, this.x - Math.sin(this.degToRad(this.lLegAngle)) * 2 * this.size, this.y + 5 * this.size + Math.cos(this.degToRad(this.lLegAngle)) * 2 * this.size, this.thickness, this.color); 
+					//R leg
+					line(this.x, this.y + 5 * this.size, this.x + Math.sin(this.degToRad(this.rLegAngle)) * 2 * this.size, this.y + 5 * this.size + Math.cos(this.degToRad(this.rLegAngle)) * 2 * this.size, this.thickness, this.color); 
+				};
+				
+				degToRad(degrees) {
+                	return degrees * (Math.PI / 180);
+            	};
+			};
+
+			canvas = document.getElementById("canvas")
+			bounds = {
+				height: canvas.height,
+				width: canvas.width
+			};
+			imageUrl = "http://pngimg.com/uploads/sun/sun_PNG13416.png";
+			rainbowColors = [
+				"#f00",
+                "#ffa500",
+                "#ff0",
+                "#008000", 
+                "#00f", 
+                "#4b0082", 
+                "#ee82ee",
+			];
+
+			console.log(bounds)
+
+			// Big brain in script documentation
+			// rectangle(x, y, w, h, c);
+			// circle(x, y, r, c);
+			// triangle(x1, y1, x2, y2, x3, y3, c);
+			// ring(x, y, r, w, c);
+			// line(x1, y1, x2, y2, w, c);
+			// picture(x, y, url, w, h);
+			// text(x, y, s, t, c);
+
+			//Background
+				//Sky
+				sky = new Rectangle(0, 0, bounds.width, bounds.height/2, "lightblue", false);
+				text(bounds.width*0.1, bounds.height*0.05, 15, "https://www.youtube.com/watch?v=dQw4w9WgXcQ", "black");
+				//Rainbow
+				rainbow = new Rainbow(bounds.width*0.65, bounds.height*0.5, 250, sky, rainbowColors);
+				//Grass
+				rectangle(0, bounds.height/2, bounds.width, bounds.height, "lime");
+				line(0, bounds.height/2, bounds.width, bounds.height/2, 3, "black");
+				//Sun
+				picture(-75, -75, imageUrl, 200, 200);
+
+			//House
+				//Base
+				houseBase = new Rectangle(790, 400, 400, 200, "red");
+				//Roof
+				roof = new Triangle(790, 400, 1190, 400, 990, 300, "brown");
+				//WindowL
+				leftWindow = new Rectangle(840, 470, 60, 60, "lightblue");
+				//WindowR
+				rightWindow = new Rectangle(1080, 470, 60, 60, "lightblue");
+				//Door
+				door = new Rectangle(960, 470, 60, 130, "orange");
+				//Doorknob
+				circle(1013, 532, 6, "gold");
+				
+			//Things
+				//Field where person can be
+                personField = new Field(bounds.width*0.1, bounds.height*0.4, bounds.width*0.3, bounds.height*0.3, false);
+				personField2 = new Field(bounds.width*0.65, bounds.height*0.35, bounds.width*0.3, bounds.height*0.3, false);
+				//Person
+				person = new Stickman(personField.randomX(), personField.randomY(), 30, 5, "red");
+				person2 = new Stickman(personField2.randomX(), personField2.randomY(), 30);
+	    </script>
+	</body>
+</html>

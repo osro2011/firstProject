@@ -17,37 +17,46 @@
 		-->
 		<script src="http://koda.nu/simple.js">
 			//General shape class
-			class Field {
-                constructor(X, Y, Width, Height, Outline=false) {
+			class Point {
+                constructor(X, Y) {
                     this.x = X;
                     this.y = Y;
-                    this.width = Width;
-                    this.height = Height;
+
+					console.log("point constructed");
+                };
+            };
+
+            class Field {
+                constructor(X, Y, X2, Y2, Outline=false, lineWidth = 3, lineColor = "black") {
+                    this.point1 = new Point(X, Y);
+                    this.point2 = new Point(X2, Y2);
                     this.outline = Outline;
 
                     if (this.outline) {
-                        line(this.x, this.y, this.x + this.width, this.y, 3, "black");
-                        line(this.x, this.y, this.x, this.y + this.height, 3, "black");
-                        line(this.x, this.y + this.height, this.x + this.width, this.y + this.height, 3, "black");
-                        line(this.x + this.width, this.y, this.x + this.width, this.y + this.height, 3, "black");
+                        line(this.point1.x, this.point1.y, this.point2.x, this.point1.y, this.lineWidth, this.lineColor);
+                        line(this.point1.x, this.point1.y, this.point1.x, this.point2.y, this.lineWidth, this.lineColor);
+                        line(this.point1.x, this.point2.y, this.point2.x, this.point2.y, this.lineWidth, this.lineColor);
+                        line(this.point2.x, this.point1.y, this.point2.x, this.point2.y, this.lineWidth, this.lineColor);
                     };
+
+					console.log("field constructed")
                 };
 
 				randomX() {
-					return random(this.x, this.x + this.width);
+					return random(this.point1.y, this.point2.x);
 				};
 
 				randomY() {
-					return random(this.y, this.y + this.height);
+					return random(this.point1.y, this.point2.y);
 				};
             };
-            class Shape {
+            
+		    class Shape {
 				//Shapes have x, y and color properties in common
-				constructor(X, Y, Color) {
+				constructor(Points, Colors) {
 					//x and y are the base point of any shape
-					this.x = X;
-					this.y = Y;
-					this.color = Color;
+					this.points = Points;
+					this.colors = Colors;
 
 					console.log("shape constructed");
 				};
@@ -55,74 +64,63 @@
 
 			//Rectangle class, is a shape and therefore inherits from shape
 			class Rectangle extends Shape {
-				constructor(X, Y, Width, Height, Color, outline = true) {
-					super(X, Y, Color);
-					this.width = Width;
-					this.height = Height;
-					this.color = Color;
+				constructor(X, Y, X2, Y2, Color, outline = true, lineWidth = 3, lineColor = "black") {
+					super([new Point(X, Y), new Point(X2, Y2)], Color);
 
 					//Draw the rectangle with an outline unless otherwise specified
 					if (outline) {
 						this.drawOutlineRectangle();
 					} else {
-						rectangle(this.x, this.y, this.width, this.height, this.color);
+						rectangle(this.points[0].x, this.points[0].y, this.points[1].x - this.points[0].x, this.points[1].y - this.points[0].y, this.colors);
 					};
 
 					console.log("rectangle constructed");
 				};
 
 				//Draw an outlined rectangle
-				drawOutlineRectangle(lineWidth = 3, lineColor = "black") {
-					//Draw rectangle
-					rectangle(this.x, this.y, this.width, this.height, this.color);
-					//Draw top outline
-					line(this.x, this.y, this.x + this.width, this.y, lineWidth, lineColor);
-					//Draw left outline
-					line(this.x, this.y, this.x, this.y + this.height, lineWidth, lineColor);
-					//Draw bottom outline
-					line(this.x, this.y + this.height, this.x + this.width, this.y + this.height, lineWidth, lineColor);
-					//Draw right outline
-					line(this.x + this.width, this.y, this.x + this.width, this.y + this.height, lineWidth, lineColor);
+				drawOutlineRectangle() {
+					//Draw rectangle with outline
+					rectangle(this.points[0].x, this.points[0].y, this.points[1].x - this.points[0].x, this.points[1].y - this.points[0].y, this.colors);
+					line(this.points[0].x, this.points[0].y, this.points[1].x, this.points[0].y, this.lineWidth, this.lineColor);
+                    line(this.points[0].x, this.points[0].y, this.points[0].x, this.points[1].y, this.lineWidth, this.lineColor);
+                    line(this.points[0].x, this.points[1].y, this.points[1].x, this.points[1].y, this.lineWidth, this.lineColor);
+                    line(this.points[1].x, this.points[0].y, this.points[1].x, this.points[1].y, this.lineWidth, this.lineColor);
 				};
 			};
 
 			//Triangle class, is a shape and therefore inherits from shape
 			class Triangle extends Shape {
-				constructor(X, Y, X2, Y2, X3, Y3, Color, outline = true) {
-					super(X, Y, Color);
-					this.x2 = X2;
-					this.y2 = Y2;
-					this.x3 = X3;
-					this.y3 = Y3;
+				constructor(X, Y, X2, Y2, X3, Y3, Color, outline = true, lineWidth = 3, lineColor = "black") {
+					super([new Point(X, Y), new Point(X2, Y2), new Point(X3, Y3)], Color);
 
 					//Draw the triangle with an outline unless otherwise specified
 					if (outline) {
 						this.drawOutlineTriangle();
 					} else {
-						rectangle(this.x, this.y, this.x2, this.y2, this.x3, this.y3, this.color);
+						triangle(this.points[0].x, this.points[0].y, this.points[1].x, this.points[1].y, this.points[2].x, this.points[2].y, this.colors);
 					};
 
 					console.log("triangle constructed");
 				};
 
 				//Draw an outlined triangle
-				drawOutlineTriangle(lineWidth = 3, lineColor = "black") {
+				drawOutlineTriangle() {
 					//Draw triangle
-					triangle(this.x, this.y, this.x2, this.y2, this.x3, this.y3, this.color);
+					triangle(this.points[0].x, this.points[0].y, this.points[1].x, this.points[1].y, this.points[2].x, this.points[2].y, this.colors);
 					//Draw outline from first point to second point
-					line(this.x, this.y, this.x2, this.y2, lineWidth, lineColor);
+					line(this.points[0].x, this.points[0].y, this.points[1].x, this.points[1].y, this.lineWidth, this.lineColor);
 					//Draw outline from first point to third point
-					line(this.x, this.y, this.x3, this.y3, lineWidth, lineColor);
+					line(this.points[0].x, this.points[0].y, this.points[2].x, this.points[2].y, this.lineWidth, this.lineColor);
 					//Draw outline from second point to third point
-					line(this.x2, this.y2, this.x3, this.y3, lineWidth, lineColor);
+					line(this.points[1].x, this.points[1].y, this.points[2].x, this.points[2].y, this.lineWidth, this.lineColor);
 				};
 			};
 
 			class Rainbow extends Shape {
 				constructor(X, Y, Size, Background, Colors) {
-					super(X, Y, Colors);
+					super([new Point(X, Y)], Colors); //Jag hatar att den faktiskt låter mig skicka Colors[] till Colors varför är det ens tillåtet
 					this.size = Size;
-					this.color.push(Background.color);
+					this.colors.push(Background.colors);
 
 					this.drawRainbow();
 
@@ -130,15 +128,15 @@
 				};
 
 				drawRainbow() {
-					for (var i = 0; i <= this.color.length; i++) {
-                		circle(this.x, this.y, this.size*0.1*(this.color.length-i+4), this.color[i]);
+					for (var i = 0; i <= this.colors.length; i++) {
+                		circle(this.points[0].x, this.points[0].y, this.size*0.1*(this.colors.length-i+4), this.colors[i]);
             		};
 				};
 			};
 
 			class Stickman extends Shape {
 				constructor(X, Y, Size, Thickness = 5, Color = "black", LArmAngle = 45, RArmAngle = 45, LLegAngle = 45, RLegAngle = 45) {
-					super(X, Y, Color);
+					super([new Point(X, Y)], Color);
 					this.size = Size;
 					this.lArmAngle = LArmAngle;
 					this.rArmAngle = RArmAngle;
@@ -153,17 +151,17 @@
 
 				drawStickman() {
 					//Head
-					ring(this.x, this.y, this.size, this.thickness, this.color); 
+					ring(this.points[0].x, this.points[0].y, this.size, this.thickness, this.color); 
 					//Torso
-					line(this.x, this.y + this.size, this.x, this.y + 5 * this.size, this.thickness, this.color); 
+					line(this.points[0].x, this.points[0].y + this.size, this.points[0].x, this.points[0].y + 5 * this.size, this.thickness, this.color); 
 					//L arm
-					line(this.x, this.y + 2 * this.size, this.x - Math.sin(this.degToRad(this.lArmAngle)) * 2 * this.size, this.y + 2 * this.size + Math.cos(this.degToRad(this.lArmAngle)) * 2 * this.size, this.thickness, this.color); 
+					line(this.points[0].x, this.points[0].y + 2 * this.size, this.points[0].x - Math.sin(this.degToRad(this.lArmAngle)) * 2 * this.size, this.points[0].y + 2 * this.size + Math.cos(this.degToRad(this.lArmAngle)) * 2 * this.size, this.thickness, this.color); 
 					//R arm
-					line(this.x, this.y + 2 * this.size, this.x + Math.sin(this.degToRad(this.rArmAngle)) * 2 * this.size, this.y + 2 * this.size + Math.cos(this.degToRad(this.rArmAngle)) * 2 * this.size, this.thickness, this.color); 
+					line(this.points[0].x, this.points[0].y + 2 * this.size, this.points[0].x + Math.sin(this.degToRad(this.rArmAngle)) * 2 * this.size, this.points[0].y + 2 * this.size + Math.cos(this.degToRad(this.rArmAngle)) * 2 * this.size, this.thickness, this.color); 
 					//L leg
-					line(this.x, this.y + 5 * this.size, this.x - Math.sin(this.degToRad(this.lLegAngle)) * 2 * this.size, this.y + 5 * this.size + Math.cos(this.degToRad(this.lLegAngle)) * 2 * this.size, this.thickness, this.color); 
+					line(this.points[0].x, this.points[0].y + 5 * this.size, this.points[0].x - Math.sin(this.degToRad(this.lLegAngle)) * 2 * this.size, this.points[0].y + 5 * this.size + Math.cos(this.degToRad(this.lLegAngle)) * 2 * this.size, this.thickness, this.color); 
 					//R leg
-					line(this.x, this.y + 5 * this.size, this.x + Math.sin(this.degToRad(this.rLegAngle)) * 2 * this.size, this.y + 5 * this.size + Math.cos(this.degToRad(this.rLegAngle)) * 2 * this.size, this.thickness, this.color); 
+					line(this.points[0].x, this.points[0].y + 5 * this.size, this.points[0].x + Math.sin(this.degToRad(this.rLegAngle)) * 2 * this.size, this.points[0].y + 5 * this.size + Math.cos(this.degToRad(this.rLegAngle)) * 2 * this.size, this.thickness, this.color); 
 				};
 				
 				degToRad(degrees) {
@@ -176,7 +174,7 @@
 				height: canvas.height,
 				width: canvas.width
 			};
-			imageUrl = "http://pngimg.com/uploads/sun/sun_PNG13416.png";
+			imageUrl = "http://pngimg.com/uploads/sun/sun_PNG13416.png"
 			rainbowColors = [
 				"#f00",
                 "#ffa500",
@@ -186,6 +184,22 @@
                 "#4b0082", 
                 "#ee82ee",
 			];
+			worldStates = {
+				seasons: [
+					"winter", 
+					"spring", 
+					"summer", 
+					"fall"
+				], 
+				daylightcycle: [
+					"day", 
+					"night"
+				]
+			};
+			worldState = {
+				season: worldStates.seasons[random(worldStates.seasons.length)], 
+				daylightState: worldStates.daylightcycle[random(worldStates.daylightcycle.length)]
+			};
 
 			console.log(bounds)
 
@@ -212,25 +226,23 @@
 
 			//House
 				//Base
-				houseBase = new Rectangle(790, 400, 400, 200, "red");
+				houseBase = new Rectangle(790, 400, 1190, 600, "red");
 				//Roof
 				roof = new Triangle(790, 400, 1190, 400, 990, 300, "brown");
 				//WindowL
-				leftWindow = new Rectangle(840, 470, 60, 60, "lightblue");
+				leftWindow = new Rectangle(840, 470, 900, 530, "lightblue");
 				//WindowR
-				rightWindow = new Rectangle(1080, 470, 60, 60, "lightblue");
+				rightWindow = new Rectangle(1080, 470, 1140, 540, "lightblue");
 				//Door
-				door = new Rectangle(960, 470, 60, 130, "orange");
+				door = new Rectangle(960, 470, 1020, 600, "orange");
 				//Doorknob
 				circle(1013, 532, 6, "gold");
 				
 			//Things
 				//Field where person can be
-                personField = new Field(bounds.width*0.1, bounds.height*0.4, bounds.width*0.3, bounds.height*0.3, false);
-				personField2 = new Field(bounds.width*0.65, bounds.height*0.35, bounds.width*0.3, bounds.height*0.3, false);
+                personField = new Field(bounds.width*0.05, bounds.height*0.4, bounds.width*0.4, bounds.height*0.7, true);
 				//Person
-				person = new Stickman(personField.randomX(), personField.randomY(), 30, 5, "red");
-				person2 = new Stickman(personField2.randomX(), personField2.randomY(), 30);
+				person = new Stickman(personField.randomX(), personField.randomY(), 30);
 	    </script>
 	</body>
 </html>
