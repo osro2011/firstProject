@@ -17,6 +17,12 @@
 		-->
 		<script src="http://koda.nu/simple.js">
 			//General shape class
+			var defaults = {
+				outlineWidth: 3,
+				outlineColor: "black",
+				showFieldOutlines: true
+			};
+
 			class Point {
                 constructor(X, Y) {
                     this.x = X;
@@ -27,9 +33,11 @@
             };
 
             class Field {
-                constructor(X, Y, X2, Y2, Outline=false, lineWidth = 3, lineColor = "black") {
+                constructor(X, Y, X2, Y2, Outline=defaults.showFieldOutlines, LineWidth = defaults.outlineWidth, LineColor = defaults.outlineColor) {
                     this.point1 = new Point(X, Y);
-                    this.point2 = new Point(X2, Y2);
+					this.point2 = new Point(X2, Y2);
+					this.lineWidth = LineWidth;
+					this.lineColor = LineColor;
                     this.outline = Outline;
 
                     if (this.outline) {
@@ -64,8 +72,10 @@
 
 			//Rectangle class, is a shape and therefore inherits from shape
 			class Rectangle extends Shape {
-				constructor(X, Y, X2, Y2, Color, outline = true, lineWidth = 3, lineColor = "black") {
+				constructor(X, Y, X2, Y2, Color, outline = true, LineWidth = defaults.outlineWidth, LineColor = defaults.outlineColor) {
 					super([new Point(X, Y), new Point(X2, Y2)], Color);
+					this.lineWidth = LineWidth;
+					this.lineColor = LineColor;
 
 					//Draw the rectangle with an outline unless otherwise specified
 					if (outline) {
@@ -90,8 +100,10 @@
 
 			//Triangle class, is a shape and therefore inherits from shape
 			class Triangle extends Shape {
-				constructor(X, Y, X2, Y2, X3, Y3, Color, outline = true, lineWidth = 3, lineColor = "black") {
+				constructor(X, Y, X2, Y2, X3, Y3, Color, outline = true, LineWidth = defaults.outlineWidth, LineColor = defaults.outlineColor) {
 					super([new Point(X, Y), new Point(X2, Y2), new Point(X3, Y3)], Color);
+					this.lineWidth = LineWidth;
+					this.lineColor = LineColor;
 
 					//Draw the triangle with an outline unless otherwise specified
 					if (outline) {
@@ -220,7 +232,7 @@
 				rainbow = new Rainbow(bounds.width*0.65, bounds.height*0.5, 250, sky, rainbowColors);
 				//Grass
 				rectangle(0, bounds.height/2, bounds.width, bounds.height, "lime");
-				line(0, bounds.height/2, bounds.width, bounds.height/2, 3, "black");
+				line(0, bounds.height/2, bounds.width, bounds.height/2, defaults.outlineWidth, defaults.outlineColor);
 				//Sun
 				picture(-75, -75, imageUrl, 200, 200);
 
@@ -240,7 +252,7 @@
 				
 			//Things
 				//Field where person can be
-                personField = new Field(bounds.width*0.05, bounds.height*0.4, bounds.width*0.4, bounds.height*0.7, true);
+                personField = new Field(bounds.width*0.05, bounds.height*0.4, bounds.width*0.4, bounds.height*0.7);
 				//Person
 				person = new Stickman(personField.randomX(), personField.randomY(), 30);
 	    </script>
